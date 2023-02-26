@@ -1,0 +1,179 @@
+@import "fonts.css";
+
+:root{
+    --main-clr: #1f2628;
+    --second-clr: #25b69b;
+    --light-gray-clr: #b8bdc1;
+    --gray-clr: #242d2e;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    direction: rtl;
+    font-family: Tajawal;
+}
+
+body{
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 100px 1fr;
+    grid-template-areas:
+    "aside header header header"
+    "aside main main main";
+}
+
+aside{
+    grid-area: aside;
+    background-color: var(--gray-clr);
+    color: #baa;
+}
+
+aside .logo{
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main-clr);
+    color: #eee;
+}
+
+.logo img{
+    width: 50px;
+    aspect-ratio: 1 / 1;
+}
+
+aside nav ul li{
+    list-style: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+aside .active{
+    border-right: 3px solid #25b69b;
+    background-color: #1f2628;
+    color: white;
+}
+
+header{
+    background-color: #25b69b;
+    grid-area: header;
+}
+
+header .active_section{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    color: white;
+}
+
+header .active_section img{
+    stroke: gray;
+    width: 35px;
+    aspect-ratio: 1 / 1;
+    margin: 0 20px;
+}
+
+article{
+    grid-area: main;
+}
+
+.mainPanel{
+    padding: 40px;
+}
+
+.mainPanel h4{
+    color: gray;
+    border-right: 3px solid #25b69b;
+    padding: 10px 20px;
+    background-color: #dfe;
+}
+
+.mainPanel h5{
+    margin: 10px auto;
+}
+
+.files{
+    width: 100%;
+    padding: 15px;
+    background-color: var(--light-gray-clr);
+}
+
+.files .buttons{
+    display: flex;
+    gap: 20px;
+}
+
+.files .buttons .btn{
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding-left: 10px;
+    border-radius: 2em;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: .5s;
+}
+
+.files .buttons .btn:hover{
+    opacity: 1;
+}
+
+.files .buttons img{
+    height: 40px;
+    width: 40px;
+}
+
+.file{
+    padding: 10px;
+    color: var(--gray-clr);
+    background-color: #fff;
+    border-radius: 7px;
+    font-size: 1.1em;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    cursor: pointer;
+    margin: 7px auto;
+}
+
+.file:has(>input[type=checkbox]:checked){
+    outline: 2px solid #00aced;
+}
+
+.file .fileID{
+    padding: 0px 8px;
+    background-color: var(--second-clr);
+    color: white;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    border-radius: 2em;
+}
+
+.file img{
+    height: 30px;
+    width: 30px;
+}
+
+.mainPanel .load{
+    position: fixed;
+    bottom: 20px;
+    left: 30px;
+    padding: 7px 30px;
+    background-color: teal;
+    color: var(--light-gray-clr);
+    font-size: 1.5em;
+    border-radius: 2em;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0,0,0,.5);
+    transition: .25s ease-in;
+    opacity: 0.7;
+}
+
+.load:hover{
+    opacity: 1;
+    color: white;
+}

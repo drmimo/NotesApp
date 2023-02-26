@@ -1,0 +1,94 @@
+.cards{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    padding: 20px;
+}
+
+.fileCard{
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    padding: 10px;
+    overflow: hidden;
+}
+
+.fileCard .icon{
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.fileCard .result img{
+    height: 22px;
+    aspect-ratio: 1 / 1;
+}
+
+.fileCard img{
+    width: 25px;
+    height: 25px;
+}
+
+.fileCard .cardHeader{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 3px 5px;
+    color: white;
+    margin: -10px -10px 10px -10px;
+    background-color: var(--gray-clr);
+}
+
+.fileCard .cardBody{
+    background-color: #ddd;
+    margin: -10px -10px 10px -10px;
+    padding: 10px;
+}
+
+.fileCard .actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fileCard .result{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border: 2px solid red;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.fileCard .result.correct{
+    border:none;
+}
+
+.fileCard .actions .btn{
+    background-color: var(--second-clr);
+    color: var(--light-gray-clr);
+    cursor: pointer;
+    padding: .2em 1em;
+    border-radius: 2em;
+    transition: .25s ease-in
+}
+
+.fileCard .actions .btn:hover{
+    color: white;
+    transform: scale(1.1);
+}
+
+.errorRange{
+    margin: 7px auto;
+}
+
+.errorRange .error{
+    background-color: var(--second-clr);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 2em;
+}

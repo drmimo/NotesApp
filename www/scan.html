@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css"/>
+    <link rel="stylesheet" href="./css/scan.css"/>
+    <script src="./eel.js" defer></script>
+    <title>لوحة التحكم</title>
+</head>
+<body>
+    
+        <header>
+            <div class="active_section">
+                <img src="./img/settings.svg" alt="">
+                كشف وتصحيح الأخطاء
+            </div>
+            
+        </header>
+        <article class="mainPanel">
+            <h1>فحص ملفات الحجز</h1>
+            <h4>انتظر حتّى يتم فحص ملفات الحجز المحدّدة.<br/>يمكنك تصحيح الأخطاء ثم إرسال الملفات إلى المجلّد النهائي Output</h4>
+            <h5>حدّد الملفات التي تريد التحقيق فيها أو تصحيحها ثم انقر على تحقيق</h5>
+
+            <div class="files">
+                <div class="buttons">
+                    <div class="btn" onclick="javascript:eel.getFiles()(showFiles)">
+                        <img src="./img/refresh.svg" alt="refresh"/>
+                        تحيين
+                    </div>
+
+                    <div class="btn" style="padding-right: 5px">
+                        <img src="./img/select-all.svg" alt="select-all"/>
+                        تحديد الكل
+                    </div>
+                </div>
+                <div class="cards">
+                    <label for="check_1"><div class="fileCard original">
+                        <input type="checkbox" id="check_1" hidden/>
+                        <div class="cardHeader">
+                            <div class="icon">
+                                <img src="./img/xls.svg" alt="xls-icon"/>
+                            </div>
+                            <span class="file-nanme">xxx</span>
+                        </div>
+                        <div class="cardBody">
+                            <div class="errorRange"><span class="error">نوع الخطأ</span>: <span class="Qt">20</span></div>
+                            <div class="errorRange"><span class="error">نوع الخطأ</span>: <span class="Qt">20</span></div>
+                            <div class="errorRange"><span class="error">نوع الخطأ</span>: <span class="Qt">20</span></div>
+                        </div>
+                        <div class="actions">
+                            <div class="result">
+                                <img src="./img/incorrect.svg" alt="icon" title="نتيجة الفحص">
+                            </div>
+
+                            <div class="btn">
+                                تصدير
+                            </div>
+                        </div>
+                    </div></label>
+
+                    <label for="check"><div class="fileCard original">
+                        <input type="checkbox" id="check" hidden/>
+                        <div class="cardHeader">
+                            <div class="icon">
+                                <img src="./img/xls.svg" alt="xls-icon"/>
+                            </div>
+                            <span class="file-nanme">xxx</span>
+                        </div>
+                        <div class="cardBody">
+                            <div class="errorRange"><span class="error">نوع الخطأ</span>: <span class="Qt">20</span></div>
+                            <div class="errorRange"><span class="error">نوع الخطأ</span>: <span class="Qt">20</span></div>
+                            <div class="errorRange"><span class="error">نوع الخطأ</span>: <span class="Qt">20</span></div>
+                        </div>
+                        <div class="actions">
+                            <div class="result correct">
+                                <img src="./img/correct.svg" alt="icon" title="نتيجة الفحص">
+                            </div>
+
+                            <div class="btn">
+                                تصدير
+                            </div>
+                        </div>
+                    </div></label>
+                </div>
+            </div>
+
+            <div class="load" onclick="javascript:loadSelectedFiles()">
+                تحقيق
+            </div>
+        </article>
+    
+    <aside>
+        <div class="logo">
+            <img src="./img/logo.svg" alt="app_logo"/>
+            <div class="txt">
+                تحضير ملفات الحجز
+            </div>
+        </div>
+        <nav>
+            قائمة العمليات
+            <ul>
+                <li>ملفات الحجز</li>
+                <li class="active">كشف وتصحيح الأخطاء</li>
+                <li>الملاحظات</li>
+                <li>إعدادات التطبيق</li>
+            </ul>
+        </nav>
+    </aside>
+    <script>
+        let original = document.querySelector('.file.original');
+        let filesList =document.querySelector('.files'); 
+
+        function showFiles(data){
+            if(data.length != 0){
+                console.log(data)
+                for(const file of data){
+                    let clone = original.parentElement.cloneNode(true);
+                    clone.querySelector('.fileName').innerText = file
+                    clone.querySelector('input[type=checkbox]').id = 'check'+data.indexOf(file)
+                    clone.setAttribute('for', 'check'+data.indexOf(file))
+                    filesList. appendChild(clone)
+                }
+                original.style.display = 'none'
+            }else{
+                console.log(data)
+                alert('مجلّد المدخلات فارغ، يرجى نقل ملفاتك إلى مجلّد input')
+            }
+        }
+
+        function loadSelectedFiles(){
+            let selectedFiles = filesList.querySelectorAll('input[type=checkbox]:checked ~ span.fileName')
+            for(let file of selectedFiles)
+                alert(file.innerText)
+        }
+
+    </script>
+</body>
+</html>

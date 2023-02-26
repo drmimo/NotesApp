@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css"/>
+    <script src="./eel.js" defer></script>
+    <title>لوحة التحكم</title>
+</head>
+<body>
+    
+        <header>
+            <div class="active_section">
+                <img src="./img/settings.svg" alt="">
+                ملفات الحجز
+            </div>
+            
+        </header>
+        <article class="mainPanel">
+            <h1>قائمة ملفات الحجز</h1>
+            <h4>تعرض هذه القائمة ملفات الحجز المتواجدة في مجلّد input<br/>لتحديث القائمة وإظهار الملفات المضافة مؤخّرا انقر على زر "تحيين"</h4>
+            <h5>حدّد الملفات التي تريد التحقيق فيها أو تصحيحها ثم انقر على تحقيق</h5>
+
+            <div class="files">
+                <div class="buttons">
+                    <div class="btn" onclick="javascript:eel.getFiles()(showFiles)">
+                        <img src="./img/refresh.svg" alt="refresh"/>
+                        تحيين
+                    </div>
+
+                    <div class="btn" style="padding-right: 5px" onclick="javascript:selectAll()">
+                        <img src="./img/select-all.svg" alt="select-all"/>
+                        تحديد الكل
+                    </div>
+                </div>
+                <div class="filesBoard">
+                    
+                </div>
+                <label class="original" style="display: none" for="check"><div class="file">
+                    <input type="checkbox" id="check" class="orgCheck" hidden/>
+                    <div class="fileID">00</div>
+                    <img src="./img/xls.svg" alt="icon"/>
+                    <span class="fileName">خلاف محمود - الفصل الثاني</span>
+                </div></label>
+                <!--label for="check_2"><div class="file">
+                    <input type="checkbox" id="check_2" hidden/>
+                    <div class="fileID">00</div>
+                    <img src="./img/xls.svg" alt="icon"/>
+                    <span class="fileName">خلاف محمود - الفصل الثاني</span>
+                </div></label-->
+            </div>
+
+            <div class="load" onclick="javascript:loadSelectedFiles()">
+                تحقيق
+            </div>
+        </article>
+    
+    <aside>
+        <div class="logo">
+            <img src="./img/logo.svg" alt="app_logo"/>
+            <div class="txt">
+                تحضير ملفات الحجز
+            </div>
+        </div>
+        <nav>
+            قائمة العمليات
+            <ul>
+                <li class="active">ملفات الحجز</li>
+                <li>كشف وتصحيح الأخطاء</li>
+                <li>الملاحظات</li>
+                <li>إعدادات التطبيق</li>
+            </ul>
+        </nav>
+    </aside>
+    <script>
+        let original = document.querySelector('.original');
+        //let filesList =document.querySelector('.files');
+        let filesBoard = document.querySelector('.filesBoard')
+
+        function showFiles(data){
+
+            filesBoard.innerHTML = "";
+            
+            //alert(data.length)
+            if(data.length != 0){
+                console.log(data)
+                //alert('New data have gotten')
+                for(const file of data){
+                    let clone = original.cloneNode(true);
+                    clone.querySelector('.fileName').innerText = file
+                    clone.querySelector('input[type=checkbox]').id = 'check'+data.indexOf(file)
+                    clone.querySelector('input[type=checkbox]').className = 'clone'
+                    clone.setAttribute('for', 'check'+data.indexOf(file))
+                    clone.style.display ='block'
+                    filesBoard.append(clone)
+                }
+                
+            }else{
+                console.log(data)
+                alert('مجلّد المدخلات فارغ، يرجى نقل ملفاتك إلى مجلّد input')
+            }
+        }
+
+        function loadSelectedFiles(){
+            //alert('Loading...')
+            let Url = './checkpoint.html?'
+            let selectedFiles = filesBoard.querySelectorAll('input[type=checkbox]:checked ~ span.fileName')
+            alert(selectedFiles.length)
+            for(let counter = 0; counter<selectedFiles.length; counter++)
+            {
+                counter < selectedFiles.length-1 ? Url += ('file='+selectedFiles[counter].innerText+'&') : Url += ('file='+selectedFiles[counter].innerText)
+                //alert(file.innerText)
+            }    
+            window.location = Url
+        }
+
+        
+        function selectAll(){
+            let checkbox = document.querySelectorAll('input[type=checkbox]:not(.orgCheck)')
+            checkbox.forEach((chkbx)=>chkbx.checked=true)
+            //alert(checkbox.length)
+        }
+    </script>
+</body>
+</html>
