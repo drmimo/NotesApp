@@ -1,23 +1,13 @@
 ```
-# Build results
+# Build artifacts
 bin/
 obj/
-out/
-
-# User-specific files
-.vs/
-*.user
-*.userosscache
-*.suo
-*.csproj.user
-
-# Environment
-.env
-.env.local
-*.env.*
+*.exe
+*.dll
+*.pdb
+*.userprefs
 
 # Dependencies
-node_modules/
 packages/
 
 # Logs
@@ -27,11 +17,8 @@ packages/
 .DS_Store
 Thumbs.db
 
-# Compressed archives
-*.zip
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.7z
-*.rar
+# Visual Studio files
+.vs/
+*.user
+*.suo
 ```

@@ -11,7 +11,7 @@
             <Color x:Key="DarkSecondaryTextColor">#B0B0B0</Color>
             <Color x:Key="DarkAccentColor">#4CAF50</Color>
             <Color x:Key="DarkErrorColor">#F44336</Color>
-            
+
             <!-- Light Mode Colors -->
             <Color x:Key="LightBackgroundColor">#F5F5F5</Color>
             <Color x:Key="LightSurfaceColor">#FFFFFF</Color>
@@ -19,7 +19,7 @@
             <Color x:Key="LightSecondaryTextColor">#757575</Color>
             <Color x:Key="LightAccentColor">#388E3C</Color>
             <Color x:Key="LightErrorColor">#D32F2F</Color>
-            
+
             <!-- Default (Dark) Brushes -->
             <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource DarkBackgroundColor}"/>
             <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource DarkSurfaceColor}"/>
@@ -27,16 +27,16 @@
             <SolidColorBrush x:Key="SecondaryTextBrush" Color="{StaticResource DarkSecondaryTextColor}"/>
             <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource DarkAccentColor}"/>
             <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource DarkErrorColor}"/>
-            
+
             <!-- Font Sizes for 14' screen -->
-            <sys:Double x:Key="SmallFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">14</sys:Double>
-            <sys:Double x:Key="NormalFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">16</sys:Double>
-            <sys:Double x:Key="MediumFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">20</sys:Double>
-            <sys:Double x:Key="LargeFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">28</sys:Double>
-            <sys:Double x:Key="XLargeFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">36</sys:Double>
-            <sys:Double x:Key="QuantityPriceFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">22</sys:Double>
-            <sys:Double x:Key="TotalFontSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">42</sys:Double>
-            
+            <sys:Double x:Key="SmallFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">14</sys:Double>
+            <sys:Double x:Key="NormalFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">16</sys:Double>
+            <sys:Double x:Key="MediumFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">20</sys:Double>
+            <sys:Double x:Key="LargeFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">28</sys:Double>
+            <sys:Double x:Key="XLargeFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">36</sys:Double>
+            <sys:Double x:Key="QuantityPriceFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">22</sys:Double>
+            <sys:Double x:Key="TotalFontSize" xmlns:sys="clr-namespace:System;assembly=System.Runtime">42</sys:Double>
+
             <!-- Control Styles -->
             <Style TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
@@ -48,7 +48,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" 
+                            <Border Background="{TemplateBinding Background}"
                                     CornerRadius="4"
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -65,7 +65,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            
+
             <Style TargetType="TextBox">
                 <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
@@ -74,7 +74,7 @@
                 <Setter Property="BorderBrush" Value="{StaticResource SecondaryTextBrush}"/>
                 <Setter Property="BorderThickness" Value="1"/>
             </Style>
-            
+
             <Style TargetType="ListBoxItem">
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
