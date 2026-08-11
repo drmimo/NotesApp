@@ -1,0 +1,636 @@
+<Window x:Class="StorePOS.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:StorePOS.ViewModels"
+        mc:Ignorable="d"
+        Title="نظام إدارة المتجر - Store POS" 
+        Height="800" Width="1400"
+        WindowState="Maximized"
+        Background="{StaticResource BackgroundBrush}">
+    
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    
+    <Grid>
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}"
+                    Background="{StaticResource BackgroundBrush}"
+                    Foreground="{StaticResource TextBrush}">
+            
+            <!-- Home Tab - Cart -->
+            <TabItem Header="الرئيسية" FontSize="{StaticResource MediumFontSize}">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="350"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Left Side - Search Results -->
+                    <Grid Grid.Column="0" Margin="0,0,10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Search Box -->
+                        <TextBox Grid.Row="0" 
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="{StaticResource NormalFontSize}"
+                                 Padding="15,12"
+                                 Margin="0,0,0,15"
+                                 VerticalContentAlignment="Center"/>
+                        
+                        <!-- Search Results -->
+                        <ListBox Grid.Row="1" 
+                                 ItemsSource="{Binding SearchResults}"
+                                 SelectedItem="{Binding SelectedProduct}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource SurfaceBrush}" 
+                                            CornerRadius="8" 
+                                            Padding="15" 
+                                            Margin="0,0,0,10"
+                                            Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" 
+                                                          Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                          CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Name}" 
+                                                           FontSize="{StaticResource MediumFontSize}" 
+                                                           FontWeight="Bold"
+                                                           Foreground="{StaticResource TextBrush}"/>
+                                                <TextBlock FontSize="{StaticResource QuantityPriceFontSize}" 
+                                                           Foreground="{StaticResource AccentBrush}"
+                                                           Margin="0,5,0,0">
+                                                    <Run Text="السعر: "/>
+                                                    <Run Text="{Binding Price, StringFormat='{}{0:N2}'}"/>
+                                                    <Run Text=" د.ع"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" 
+                                                    Content="إضافة للسلة"
+                                                    VerticalAlignment="Center"
+                                                    Padding="20,10"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    
+                    <!-- Right Side - Cart -->
+                    <Grid Grid.Column="1" Margin="10,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Barcode Input -->
+                        <TextBox Grid.Row="0" 
+                                 Text="{Binding BarcodeInput, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="{StaticResource NormalFontSize}"
+                                 Padding="15,12"
+                                 Margin="0,0,0,15"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Right"
+                                 FlowDirection="RightToLeft">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding ProcessBarcodeCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        
+                        <!-- Cart Items -->
+                        <ListBox Grid.Row="1" 
+                                 ItemsSource="{Binding CartItems}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 BorderThickness="0"
+                                 Background="Transparent">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource SurfaceBrush}" 
+                                            CornerRadius="8" 
+                                            Padding="12" 
+                                            Margin="0,0,0,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Product.Name}" 
+                                                           FontSize="{StaticResource NormalFontSize}" 
+                                                           FontWeight="Bold"
+                                                           Foreground="{StaticResource TextBrush}"
+                                                           TextWrapping="Wrap"/>
+                                                <TextBlock FontSize="{StaticResource QuantityPriceFontSize}" 
+                                                           Foreground="{StaticResource AccentBrush}"
+                                                           Margin="0,5,0,0">
+                                                    <Run Text="{Binding Product.Price, StringFormat='{}{0:N2}'}"/>
+                                                    <Run Text=" د.ع"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            
+                                            <StackPanel Grid.Column="1" 
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <Button Content="-" 
+                                                            Width="35" Height="35" FontSize="{StaticResource LargeFontSize}"
+                                                            Command="{Binding DataContext.DecrementQuantityCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="0"/>
+                                                    <TextBlock Text="{Binding Quantity}" 
+                                                               FontSize="{StaticResource QuantityPriceFontSize}" 
+                                                               FontWeight="Bold"
+                                                               Foreground="{StaticResource TextBrush}"
+                                                               Width="40" 
+                                                               TextAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                    <Button Content="+" 
+                                                            Width="35" Height="35" FontSize="{StaticResource LargeFontSize}"
+                                                            Command="{Binding DataContext.IncrementQuantityCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                            CommandParameter="{Binding}"
+                                                            Padding="0"/>
+                                                </StackPanel>
+                                                <TextBlock FontSize="{StaticResource QuantityPriceFontSize}" 
+                                                           Foreground="{StaticResource SecondaryTextBrush}"
+                                                           TextAlignment="Right"
+                                                           Margin="0,5,0,0">
+                                                    <Run Text="{Binding Total, StringFormat='{}{0:N2}'}"/>
+                                                    <Run Text=" د.ع"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        
+                        <!-- Total -->
+                        <Border Grid.Row="2" 
+                                Background="{StaticResource SurfaceBrush}" 
+                                CornerRadius="8" 
+                                Padding="15" 
+                                Margin="0,10,0,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           Text="المجموع الكلي:" 
+                                           FontSize="{StaticResource LargeFontSize}" 
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource TextBrush}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" 
+                                           FontSize="{StaticResource TotalFontSize}" 
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource AccentBrush}">
+                                    <Run Text="{Binding CartTotal, StringFormat='{}{0:N2}'}"/>
+                                    <Run Text=" د.ع" FontSize="{StaticResource LargeFontSize}"/>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- Action Buttons -->
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Button Grid.Column="0" 
+                                    Content="إلغاء"
+                                    Command="{Binding CancelCartCommand}"
+                                    Background="{StaticResource ErrorBrush}"
+                                    Margin="0,0,5,0"/>
+                            
+                            <Button Grid.Column="1" 
+                                    Content="دفع"
+                                    Command="{Binding CheckoutCommand}"
+                                    Margin="5,0,0,0"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            
+            <!-- Sales Tab -->
+            <TabItem Header="المبيعات" FontSize="{StaticResource MediumFontSize}">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Orders List -->
+                    <ListBox Grid.Column="0" 
+                             ItemsSource="{Binding Orders}"
+                             SelectedItem="{Binding SelectedOrder}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             Margin="0,0,10,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource SurfaceBrush}" 
+                                        CornerRadius="8" 
+                                        Padding="15" 
+                                        Margin="0,0,0,10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding OrderId}" 
+                                                       FontSize="{StaticResource MediumFontSize}" 
+                                                       FontWeight="Bold"
+                                                       Foreground="{StaticResource TextBrush}"/>
+                                            <TextBlock FontSize="{StaticResource NormalFontSize}" 
+                                                       Foreground="{StaticResource SecondaryTextBrush}"
+                                                       Margin="0,5,0,0">
+                                                <Run Text="{Binding OrderDate, StringFormat='{}{0:yyyy/MM/dd}'}"/>
+                                                <Run Text=" | "/>
+                                                <Run Text="{Binding OrderTime, StringFormat='hh\\:mm\\:ss'}"/>
+                                            </TextBlock>
+                                            <TextBlock FontSize="{StaticResource NormalFontSize}" 
+                                                       Foreground="{StaticResource SecondaryTextBrush}">
+                                                <Run Text="عدد المنتجات: "/>
+                                                <Run Text="{Binding Products.Count}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1" 
+                                                   FontSize="{StaticResource LargeFontSize}" 
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource AccentBrush}"
+                                                   VerticalAlignment="Center">
+                                            <Run Text="{Binding Total, StringFormat='{}{0:N2}'}"/>
+                                            <Run Text=" د.ع" FontSize="{StaticResource NormalFontSize}"/>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    
+                    <!-- Order Details -->
+                    <Border Grid.Column="1" 
+                            Background="{StaticResource SurfaceBrush}" 
+                            CornerRadius="8" 
+                            Padding="20"
+                            Margin="10,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" 
+                                       Text="تفاصيل الطلب" 
+                                       FontSize="{StaticResource XLargeFontSize}" 
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,20"/>
+                            
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding SelectedOrder.Products}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource SecondaryTextBrush}" 
+                                                    BorderThickness="0,0,0,1" 
+                                                    Padding="0,10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" 
+                                                               Text="{Binding ProductName}" 
+                                                               FontSize="{StaticResource NormalFontSize}"
+                                                               Foreground="{StaticResource TextBrush}"/>
+                                                    <TextBlock Grid.Column="1" 
+                                                               FontSize="{StaticResource QuantityPriceFontSize}"
+                                                               Foreground="{StaticResource TextBrush}"
+                                                               Margin="15,0">
+                                                        <Run Text="x"/>
+                                                        <Run Text="{Binding Quantity}"/>
+                                                    </TextBlock>
+                                                    <TextBlock Grid.Column="2" 
+                                                               FontSize="{StaticResource QuantityPriceFontSize}"
+                                                               Foreground="{StaticResource AccentBrush}">
+                                                        <Run Text="{Binding Price, StringFormat='{}{0:N2}'}"/>
+                                                        <Run Text=" د.ع"/>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            
+                            <Border Grid.Row="2" 
+                                    BorderBrush="{StaticResource SecondaryTextBrush}" 
+                                    BorderThickness="0,1,0,0" 
+                                    Padding="0,15,0,0"
+                                    Margin="0,15,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               Text="المجموع:" 
+                                               FontSize="{StaticResource LargeFontSize}" 
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource TextBrush}"/>
+                                    <TextBlock Grid.Column="1" 
+                                               FontSize="{StaticResource XLargeFontSize}" 
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource AccentBrush}">
+                                        <Run Text="{Binding SelectedOrder.Total, StringFormat='{}{0:N2}'}"/>
+                                        <Run Text=" د.ع" FontSize="{StaticResource LargeFontSize}"/>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            
+            <!-- Inventory Tab -->
+            <TabItem Header="المخزون" FontSize="{StaticResource MediumFontSize}">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Products List -->
+                    <Grid Grid.Column="0" Margin="0,0,10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Grid Grid.Row="0" Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBox Grid.Column="0" 
+                                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="15,12"
+                                     VerticalContentAlignment="Center"/>
+                            
+                            <Button Grid.Column="1" 
+                                    Content="إضافة منتج"
+                                    Command="{Binding AddNewProductCommand}"
+                                    Margin="10,0,0,0"/>
+                            
+                            <Button Grid.Column="2" 
+                                    Content="تحديث القائمة"
+                                    Command="{Binding LoadProductsCommand}"
+                                    Margin="10,0,0,0"/>
+                        </Grid>
+                        
+                        <ListBox Grid.Row="1" 
+                                 ItemsSource="{Binding Products}"
+                                 SelectedItem="{Binding SelectedProduct}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource SurfaceBrush}" 
+                                            CornerRadius="8" 
+                                            Padding="15" 
+                                            Margin="0,0,0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Name}" 
+                                                           FontSize="{StaticResource MediumFontSize}" 
+                                                           FontWeight="Bold"
+                                                           Foreground="{StaticResource TextBrush}"/>
+                                                <TextBlock FontSize="{StaticResource QuantityPriceFontSize}" 
+                                                           Foreground="{StaticResource AccentBrush}"
+                                                           Margin="0,5,0,0">
+                                                    <Run Text="السعر: "/>
+                                                    <Run Text="{Binding Price, StringFormat='{}{0:N2}'}"/>
+                                                    <Run Text=" د.ع"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="{StaticResource NormalFontSize}" 
+                                                           Foreground="{StaticResource SecondaryTextBrush}"
+                                                           Margin="0,5,0,0">
+                                                    <Run Text="الباركود: "/>
+                                                    <Run Text="{Binding Barcodes, StringFormat='{}{0}'}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    
+                    <!-- Product Form -->
+                    <Border Grid.Column="1" 
+                            Background="{StaticResource SurfaceBrush}" 
+                            CornerRadius="8" 
+                            Padding="20"
+                            Margin="10,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" 
+                                       Text="إضافة/تعديل منتج" 
+                                       FontSize="{StaticResource XLargeFontSize}" 
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,20"/>
+                            
+                            <TextBlock Grid.Row="1" 
+                                       Text="اسم المنتج:" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="2" 
+                                     Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="3" 
+                                       Text="السعر (د.ع):" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="4" 
+                                     Text="{Binding ProductPrice, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="5" 
+                                       Text="الباركود (افصل بينها بفاصلة):" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="6" 
+                                     Text="{Binding ProductBarcodes, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <Grid Grid.Row="7">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Button Grid.Column="0" 
+                                        Content="حفظ"
+                                        Command="{Binding SaveProductCommand}"
+                                        Margin="0,0,5,0"/>
+                                
+                                <Button Grid.Column="1" 
+                                        Content="إلغاء"
+                                        Command="{Binding CancelEditCommand}"
+                                        Background="{StaticResource ErrorBrush}"
+                                        Margin="5,0,0,0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            
+            <!-- Settings Tab -->
+            <TabItem Header="الإعدادات" FontSize="{StaticResource MediumFontSize}">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Border Grid.Column="1" 
+                            Background="{StaticResource SurfaceBrush}" 
+                            CornerRadius="8" 
+                            Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" 
+                                       Text="إعدادات قاعدة البيانات" 
+                                       FontSize="{StaticResource XLargeFontSize}" 
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,20"/>
+                            
+                            <TextBlock Grid.Row="1" 
+                                       Text="عنوان الخادم (Host):" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="2" 
+                                     Text="{Binding Host, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="3" 
+                                       Text="المنفذ (Port):" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="4" 
+                                     Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="5" 
+                                       Text="اسم المستخدم:" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="6" 
+                                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="7" 
+                                       Text="كلمة المرور:" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="8" 
+                                     Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="9" 
+                                       Text="اسم قاعدة البيانات:" 
+                                       FontSize="{StaticResource NormalFontSize}"
+                                       Foreground="{StaticResource TextBrush}"
+                                       Margin="0,0,0,8"/>
+                            <TextBox Grid.Row="10" 
+                                     Text="{Binding DatabaseName, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="{StaticResource NormalFontSize}"
+                                     Padding="12,10"
+                                     Margin="0,0,0,15"/>
+                            
+                            <CheckBox Grid.Row="11" 
+                                      Content="الوضع الداكن"
+                                      IsChecked="{Binding IsDarkMode}"
+                                      FontSize="{StaticResource NormalFontSize}"
+                                      Foreground="{StaticResource TextBrush}"
+                                      Margin="0,0,0,20"/>
+                            
+                            <Button Grid.Row="12" 
+                                    Content="حفظ الإعدادات"
+                                    Click="SaveSettingsButton_Click"
+                                    HorizontalAlignment="Stretch"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
